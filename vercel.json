@@ -4,15 +4,14 @@
       {
         "src": "index.js",
         "use": "@vercel/node"
-      },
+      }, 
       {
         "src": "public/**",
         "use": "@vercel/static"
       }
     ],
     "rewrites": [
-      { "source": "/api/(.*)", "destination": "/api/$1" },
-      { "source": "/(.*)", "destination": "/index.js" }
+      { "source": "/(.*)", "destination": "index.js" }
     ],
     "headers": [
       {
@@ -32,4 +31,3 @@
       }
     ]
   }
-  
