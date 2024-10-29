@@ -3,9 +3,10 @@ import Task from "../models/task.js";
 // ///////////////////////////////////////////////////////////////////////////////////////// //
 // Create a new task
 export const createTask = async (req, res) => {
-    const { title, description, priority, user } = req.body;
+    const userId = req.user.userId
+    const { title, description, priority } = req.body;
 
-    if (!title || !description || !priority || !user) {
+    if (!title || !description || !priority ) {
         return res.status(400).send({ message: "All fields are required." });
     }
 
@@ -15,7 +16,7 @@ export const createTask = async (req, res) => {
             imageFile = req.file.path.replace(/\\/g, '/'); 
         }
 
-        const newTask = new Task({ image: imageFile, title, description, priority, user });
+        const newTask = new Task({ image: imageFile, title, description, priority, user: userId });
         await newTask.save();
         return res.status(201).json({ message: "Task created successfully.", task: newTask });
     } catch (error) {
