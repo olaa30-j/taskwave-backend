@@ -77,14 +77,15 @@ export const login = async (req, res) => {
         const refreshToken = jwt.sign(payload, process.env.Refresh_Token_SECRET_KEY, { expiresIn: REFRESH_TOKEN_EXPIRATION });
     
         res.cookie('authToken', token, {
-            httpOnly: false,
+            httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             maxAge: COOKIE_MAX_AGE,
-            sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax'
+            path: '/', 
+            sameSite: 'strict'
         });
 
         await UserModel.findByIdAndUpdate(user._id, { refreshToken });
-        return res.status(200).json({ message: "Login successful." });
+        return res.status(200).json({ message: "Login successful." , token});
     } catch (err) {
         console.error("Error logging in:", err.message);
         return res.status(500).send({ message: "Server error." });
@@ -160,7 +161,7 @@ export const refreshToken = async (req, res) => {
             const newToken = jwt.sign({ email: user.email, username: user.username }, process.env.SECRET_KEY, { expiresIn: TOKEN_EXPIRATION });
 
             res.cookie('authToken', newToken, {
-                httpOnly: false,
+                httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 maxAge: COOKIE_MAX_AGE,
                 sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax'
