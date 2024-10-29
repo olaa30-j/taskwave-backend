@@ -6,7 +6,7 @@ import upload from '../middleware/multer.js';
 const router = express.Router();
 
 // Create a new task
-router.post('/', authenticateUser, checkRoles("user"), upload.single('image'), createTask); 
+router.post('/task', authenticateUser, checkRoles("user"), upload.single('image'), createTask); 
 
 // Get all tasks
 router.get('/', getAllTasks); 
