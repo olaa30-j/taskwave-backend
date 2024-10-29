@@ -12,10 +12,10 @@ router.post('/', authenticateUser, checkRoles("user"), upload.single('image'), c
 router.get('/', getAllTasks); 
 
 // Get tasks for a specific user
-router.get('/user/:userId', authenticateUser, checkRoles("user"), getUserTasks); 
+router.get('/user', authenticateUser, checkRoles("user"), getUserTasks); 
 
  // Get a task by ID
-router.get('/:id', authenticateUser, checkRoles("user"), getTaskById);
+router.get('/task/:id', authenticateUser, checkRoles("user"), getTaskById);
 
 // Update a task
 router.put('/:id', authenticateUser, checkRoles("user"), upload.single('image'), updateTask); 

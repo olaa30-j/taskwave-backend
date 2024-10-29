@@ -40,7 +40,7 @@ export const getAllTasks = async (req, res) => {
 // ///////////////////////////////////////////////////////////////////////////////////////// //
 // Get user Tasks 
 export const getUserTasks = async (req, res) => {
-    const { userId } = req.user.userId;
+    const  userId = req.user.userId;
     try {
         const tasks = await Task.find({ user: userId }).populate("user", ['userImage', 'username', '-_id']); 
 
