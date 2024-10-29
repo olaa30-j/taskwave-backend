@@ -6,7 +6,7 @@ import upload from '../middleware/multer.js';
 const router = express.Router();
 
 // Create a new task
-router.post('/', authenticateUser, checkRoles("user"), upload.single('userImage'), createTask); 
+router.post('/', authenticateUser, checkRoles("user"), upload.single('image'), createTask); 
 
 // Get all tasks
 router.get('/', getAllTasks); 
@@ -18,7 +18,7 @@ router.get('/user/:userId', authenticateUser, checkRoles("user"), getUserTasks);
 router.get('/:id', authenticateUser, checkRoles("user"), getTaskById);
 
 // Update a task
-router.put('/:id', authenticateUser, checkRoles("user"), upload.single('userImage'), updateTask); 
+router.put('/:id', authenticateUser, checkRoles("user"), upload.single('image'), updateTask); 
 
 // Delete a task
 router.delete('/:id', authenticateUser, checkRoles("user"), deleteTask); 
