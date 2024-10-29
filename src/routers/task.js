@@ -1,5 +1,5 @@
 import express from 'express';
-import { createTask, getAllTasks, getUserTasks, getTaskById, updateTask, deleteTask } from '../controller/task.js';
+import { createTask, getAllTasks, getUserTasks, getTaskById, updateTask, deleteTask, updateTaskState } from '../controller/task.js';
 import { authenticateUser, checkRoles } from '../middleware/auth.js';
 import upload from '../middleware/multer.js';
 
@@ -18,7 +18,10 @@ router.get('/user', authenticateUser, checkRoles("user"), getUserTasks);
 router.get('/task/:id', authenticateUser, checkRoles("user"), getTaskById);
 
 // Update a task
-router.put('/:id', authenticateUser, checkRoles("user"), upload.single('image'), updateTask); 
+router.patch('/:id', authenticateUser, checkRoles("user"), upload.single('image'), updateTask); 
+
+// Update state of task
+router.patch('/state/:id', authenticateUser, checkRoles("user"), updateTaskState); 
 
 // Delete a task
 router.delete('/:id', authenticateUser, checkRoles("user"), deleteTask); 
