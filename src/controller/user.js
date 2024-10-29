@@ -85,7 +85,7 @@ export const login = async (req, res) => {
         });
 
         await UserModel.findByIdAndUpdate(user._id, { refreshToken });
-        return res.status(200).json({ message: "Login successful." });
+        return res.status(200).json({ message: "Login successful." }, token);
     } catch (err) {
         console.error("Error logging in:", err.message);
         return res.status(500).send({ message: "Server error." });
