@@ -77,7 +77,7 @@ export const login = async (req, res) => {
         const refreshToken = jwt.sign(payload, process.env.Refresh_Token_SECRET_KEY, { expiresIn: REFRESH_TOKEN_EXPIRATION });
     
         res.cookie('authToken', token, {
-            httpOnly: true,
+            httpOnly: false,
             secure: process.env.NODE_ENV === 'production',
             maxAge: COOKIE_MAX_AGE,
             path: '/', 
