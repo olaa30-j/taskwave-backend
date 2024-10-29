@@ -80,6 +80,7 @@ export const login = async (req, res) => {
             httpOnly: false,
             secure: process.env.NODE_ENV === 'production',
             maxAge: COOKIE_MAX_AGE,
+            path: '/', 
             sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax'
         });
 
