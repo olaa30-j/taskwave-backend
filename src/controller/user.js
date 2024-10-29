@@ -81,7 +81,7 @@ export const login = async (req, res) => {
             secure: process.env.NODE_ENV === 'production',
             maxAge: COOKIE_MAX_AGE,
             path: '/', 
-            sameSite: 'strict'
+            sameSite: 'None'
         });
 
         await UserModel.findByIdAndUpdate(user._id, { refreshToken });
