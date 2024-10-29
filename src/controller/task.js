@@ -110,7 +110,7 @@ export const updateTaskState = async (req, res) => {
     const {state} = req.body;
 
     try {
-        const task = Task.findById(id);
+        const task = await Task.findById(id);
         if (!task) {
             return res.status(404).send({ message: "Task not found." });
         }
