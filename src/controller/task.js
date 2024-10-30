@@ -1,4 +1,5 @@
 import Task from "../models/task.js"; 
+import UserModel from "../models/user.js"
 
 // ///////////////////////////////////////////////////////////////////////////////////////// //
 // Create a new task
@@ -75,6 +76,7 @@ export const getTaskById = async (req, res) => {
 // ///////////////////////////////////////////////////////////////////////////////////////// //
 // Update a task
 export const updateTask = async (req, res) => {
+    const userId = req.user.userId;
     const { id } = req.params;
     const updates = req.body;
 
@@ -84,22 +86,22 @@ export const updateTask = async (req, res) => {
         if (!task) {
             return res.status(404).json({ message: "Task not found." });
         }
-
-        // if (task.ownerId.toString() !== req.user.id) {
-        //     return res.status(403).json({ message: "You can only update your own tasks." });
-        // }
-
         if (req.file) {
             updates.image = req.file.path.replace(/\\/g, '/');
         }   
 
-        const updatedTask = await Task.findByIdAndUpdate(id, updates, { new: true });
+        const user = UserModel.findById(userId);
 
-        if (!updatedTask) {
-            return res.status(400).json({ message: "Failed to update the task." });
+        if (user._id.toString() === task.user.toString()) { 
+            const updatedTask = await Task.findByIdAndUpdate(id, updates, { new: true });
+            if (!updatedTask) {
+                return res.status(400).json({ message: "Failed to update the task." });
+            }
+
+            return res.status(200).json({ message: "Task updated successfully.", task: updatedTask });
+        } else {
+            return res.status(403).json({ message: "User does not have access to update this task." });
         }
-
-        return res.status(200).json({ message: "Task updated successfully.", task: updatedTask });
     } catch (error) {
         console.error("Error updating task:", error); 
         return res.status(500).json({ message: "Server error.", error: error.message }); 
