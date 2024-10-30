@@ -82,26 +82,37 @@ export const updateTask = async (req, res) => {
         const task = await Task.findById(id);
 
         if (!task) {
-            return res.status(404).send({ message: "Task not found." });
+            return res.status(404).json({ message: "Task not found." });
         }
 
         if (task.ownerId.toString() !== req.user.id) {
-            return res.status(403).send({ message: "You can only update your own tasks." });
+            return res.status(403).json({ message: "You can only update your own tasks." });
         }
 
         if (req.file) {
+            if (task.image) {
+                const oldImagePath = path.join(__dirname, '..', task.image);
+                fs.unlink(oldImagePath, (err) => {
+                    if (err) {
+                        console.error("Error deleting old image:", err);
+                    }
+                });
+            }
             updates.image = req.file.path.replace(/\\/g, '/');
         }
 
         const updatedTask = await Task.findByIdAndUpdate(id, updates, { new: true });
 
+        if (!updatedTask) {
+            return res.status(400).json({ message: "Failed to update the task." });
+        }
+
         return res.status(200).json({ message: "Task updated successfully.", task: updatedTask });
     } catch (error) {
-        console.error("Error updating task:", error.message);
-        return res.status(500).send({ message: "Server error." });
+        console.error("Error updating task:", error); 
+        return res.status(500).json({ message: "Server error.", error: error.message }); 
     }
 };
-
 
 // ///////////////////////////////////////////////////////////////////////////////////////// //
 // Update state of task by any user 
