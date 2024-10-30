@@ -85,21 +85,13 @@ export const updateTask = async (req, res) => {
             return res.status(404).json({ message: "Task not found." });
         }
 
-        if (task.ownerId.toString() !== req.user.id) {
-            return res.status(403).json({ message: "You can only update your own tasks." });
-        }
+        // if (task.ownerId.toString() !== req.user.id) {
+        //     return res.status(403).json({ message: "You can only update your own tasks." });
+        // }
 
         if (req.file) {
-            if (task.image) {
-                const oldImagePath = path.join(__dirname, '..', task.image);
-                fs.unlink(oldImagePath, (err) => {
-                    if (err) {
-                        console.error("Error deleting old image:", err);
-                    }
-                });
-            }
             updates.image = req.file.path.replace(/\\/g, '/');
-        }
+        }   
 
         const updatedTask = await Task.findByIdAndUpdate(id, updates, { new: true });
 
