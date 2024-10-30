@@ -90,9 +90,7 @@ export const updateTask = async (req, res) => {
             updates.image = req.file.path.replace(/\\/g, '/');
         }   
 
-        const user = UserModel.findById(userId);
-
-        if (user._id.toString() === task.user.toString()) { 
+        if (userId === task.user.toString()) { 
             const updatedTask = await Task.findByIdAndUpdate(id, updates, { new: true });
             if (!updatedTask) {
                 return res.status(400).json({ message: "Failed to update the task." });
